@@ -1,6 +1,7 @@
 package scrapper
 
 import (
+	"strconv"
 	"strings"
 
 	"github.com/gocolly/colly"
@@ -25,16 +26,16 @@ func (r *Zora) SearchItem(itemName string) ItemSlice {
 
 		if e.ChildText("._product-name") != "" {
 			hrefElem, _ := e.DOM.Find("._product-name").Children().Attr("href")
-			//price, _ := strconv.ParseFloat(e.ChildText("_product-price"), 32)
+			price, _ := strconv.ParseFloat(strings.ReplaceAll(e.ChildText("_product-price"), "лв.", ""), 32)
 
 			imgURL, _ := e.DOM.Find(".preview").Children().Html()
 
 			tmp = append(tmp, Item{
 				Name:     e.ChildText("._product-name"),
-				Price:    000,
+				Price:    price,
 				URL:      e.Request.AbsoluteURL(hrefElem),
 				ImageURL: imgURL,
-				Website:  "techno"})
+				Website:  "zora"})
 
 		}
 
