@@ -1,5 +1,7 @@
 package scrapper
 
+// TODO: REMAKE ALL THE PACKAGE
+
 import (
 	"strconv"
 	"strings"
@@ -7,11 +9,11 @@ import (
 	"github.com/gocolly/colly"
 )
 
-// Zora Signature struct for Zora Website
-type Zora struct{}
+// Emag Signature struct for Emag Website
+type Emag struct{}
 
-// SearchItem Get Item results from Technopolis search criteria
-func (r *Zora) SearchItem(itemName string) ItemSlice {
+// SearchItem Get Item results from Emag search criteria
+func (r *Emag) SearchItem(itemName string) ItemSlice {
 	var tmp ItemSlice
 
 	c := colly.NewCollector(
@@ -22,7 +24,7 @@ func (r *Zora) SearchItem(itemName string) ItemSlice {
 	)
 
 	// Find and visit all links
-	c.OnHTML("._product-inner", func(e *colly.HTMLElement) {
+	c.OnHTML(".js-product-data", func(e *colly.HTMLElement) {
 
 		if e.ChildText("._product-name") != "" {
 			hrefElem, _ := e.DOM.Find("._product-name").Children().Children().Attr("href")
@@ -37,13 +39,13 @@ func (r *Zora) SearchItem(itemName string) ItemSlice {
 				Price:    price,
 				URL:      e.Request.AbsoluteURL(hrefElem),
 				ImageURL: imgURL,
-				Website:  "zora"})
+				Website:  "emag"})
 
 		}
 
 	})
 
-	c.Visit("https://zora.bg/products?search=" + strings.ReplaceAll(itemName, " ", "+") + "&order_by=price_from&order_direction=asc")
+	c.Visit("https://www.emag.bg/search/" + strings.ReplaceAll(itemName, " ", "%20") + "?ref=effective_search")
 	c.Wait()
 	return tmp
 }
