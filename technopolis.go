@@ -11,8 +11,8 @@ import (
 type Technopolis struct{}
 
 // SearchItem Get Item results from Technopolis search criteria
-func (r *Technopolis) SearchItem(itemName string) ItemDictionary {
-	tmp := make(ItemDictionary)
+func (r *Technopolis) SearchItem(itemName string) ItemSlice {
+	var tmp  ItemSlice
 
 	c := colly.NewCollector(
 		// MaxDepth is 2, so only the links on the scraped page
@@ -30,7 +30,7 @@ func (r *Technopolis) SearchItem(itemName string) ItemDictionary {
 
 			imgURL, _ := e.DOM.Find(".preview").Children().Html()
 
-			tmp[e.ChildText(".item-name")] = append(tmp[e.ChildText(".item-name")], Item{
+			tmp = append(tmp, Item{
 				Name:     e.ChildText(".item-name"),
 				Price:    price,
 				URL:      e.Request.AbsoluteURL(hrefElem),

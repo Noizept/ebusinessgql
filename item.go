@@ -9,5 +9,5 @@ type Item struct {
 	Website  string
 }
 
-// ItemDictionary  Dictionary with the list of Items
-type ItemDictionary map[string][]Item
+// ItemSlice  Dictionary with the list of Items
+type ItemSlice []Item
